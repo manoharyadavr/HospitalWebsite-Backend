@@ -17,24 +17,23 @@ const appendToSheet = async (data, type) => {
     const sheets = google.sheets({ version: "v4", auth });
 
     // ✅ Get spreadsheet ID from .env
-    let spreadsheetId = process.env.GOOGLE_SHEET_ID;
+    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
-    // ✅ Automatically select correct sheet
-    let sheetName = type === "contact" ? "contact" : "day1";
+    // ✅ Automatically select the correct sheet
+    const sheetName = type === "contact" ? "contact" : "day1";
 
     if (!data || !data.length) {
       console.error("❌ Invalid data, skipping Google Sheets update.");
       return;
     }
 
-    const response = await sheets.spreadsheets.values.append({
+    await sheets.spreadsheets.values.append({
       spreadsheetId,
       range: `'${sheetName}'!A:F`,
       valueInputOption: "USER_ENTERED",
       requestBody: { values: data },
     });
 
-    console.log(`✅ Google Sheets API Response (${sheetName}):`, JSON.stringify(response.data, null, 2));
     console.log(`✅ Data added to Google Sheets (${sheetName}):`, data);
   } catch (error) {
     console.error(`❌ Google Sheets API Error (${type}):`, error.message);
@@ -57,10 +56,10 @@ const getSheetData = async (type) => {
     const sheets = google.sheets({ version: "v4", auth });
 
     // ✅ Get spreadsheet ID from .env
-    let spreadsheetId = process.env.GOOGLE_SHEET_ID;
+    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
-    // ✅ Automatically select correct sheet
-    let sheetName = type === "contact" ? "contact" : "day1";
+    // ✅ Automatically select the correct sheet
+    const sheetName = type === "contact" ? "contact" : "day1";
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
@@ -75,4 +74,5 @@ const getSheetData = async (type) => {
   }
 };
 
+// ✅ Ensure proper exports
 module.exports = { appendToSheet, getSheetData };
