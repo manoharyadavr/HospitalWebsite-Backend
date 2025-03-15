@@ -17,7 +17,7 @@ connectDB();
 // ✅ Middleware
 app.use(express.json()); // Allows JSON request body
 app.use(cors({
-  origin: ["https://hospitalwebsite-frontend.onrender.com, http://localhost:3000", "http://localhost:3001"], // ✅ Allow frontend requests
+  origin: ["https://hospitalwebsite-frontend.onrender.com", "http://localhost:3000", "http://localhost:3001"], // ✅ Allow frontend requests
   methods: "GET,POST,PUT,DELETE",
   allowedHeaders: ["Content-Type"],
 }));
