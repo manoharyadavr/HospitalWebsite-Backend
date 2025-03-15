@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Appointment = require("../models/Appointment");
-const appendToSheet = require("../googleSheets"); // ✅ Import Google Sheets function
+const { appendToSheet } = require("../googleSheets"); // ✅ Fix import
 
 // ✅ GET Route - Fetch All Appointments
 router.get("/", async (req, res) => {
@@ -34,11 +34,10 @@ router.post("/", async (req, res) => {
 
         // ✅ Prepare data for Google Sheets
         const sheetData = [[name, email, phone, date, time, reason]];
-        appendToSheet(sheetData, "appointment"); // Sends data to "day1" sheet
 
         // ✅ Send to Google Sheets (Prevent Crashes)
         try {
-            await appendToSheet(sheetData);
+            await appendToSheet(sheetData, "appointment"); // Fix the function call
             console.log("✅ Appointment added to Google Sheets:", sheetData);
         } catch (sheetError) {
             console.error("❌ Google Sheets API Error:", sheetError);
