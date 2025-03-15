@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Contact = require("../models/Contact"); // ✅ Import Contact Model
+const { appendToSheet } = require("../googleSheets"); // ✅ Import Google Sheets function
 
-// ✅ POST: Save Contact Form Submission
+// ✅ POST: Save Contact Form Submission & Send to Google Sheets
 router.post("/", async (req, res) => {
   try {
     const { name, email, message } = req.body;
@@ -14,6 +15,16 @@ router.post("/", async (req, res) => {
     // ✅ Save to MongoDB
     const newContact = new Contact({ name, email, message });
     await newContact.save();
+    console.log("✅ Saved to MongoDB:", newContact);
+
+    // ✅ Send Data to Google Sheets
+    const sheetData = [[name, email, message, new Date().toISOString()]];
+    try {
+      await appendToSheet(sheetData, "contact");
+      console.log("✅ Contact data added to Google Sheets:", sheetData);
+    } catch (sheetError) {
+      console.error("❌ Google Sheets API Error:", sheetError);
+    }
 
     res.status(200).json({ success: true, message: "Message sent successfully!" });
   } catch (error) {
